@@ -9,8 +9,11 @@ namespace NodeCanvas.Tasks.Actions {
 
 	public class seekPositionAT : ActionTask {
 
-		private BBParameter<Vector3> targetPosition;
+		//tried to set target with BB
+		//private BBParameter<Vector3> targetPosition;
 		public Transform targetTransform;
+
+		public NavMeshAgent navMeshAgent;
 
 
 		//Use for initialization. This is called only once in the lifetime of the task.
@@ -24,7 +27,10 @@ namespace NodeCanvas.Tasks.Actions {
 		//Call EndAction() to mark the action as finished, either in success or failure.
 		//EndAction can be called from anywhere.
 		protected override void OnExecute() {
-			targetPosition.value = targetTransform.position;
+
+			NavMeshHit Hit;
+			NavMesh.SamplePosition(targetTransform.position, out Hit, 400f, NavMesh.AllAreas);
+			navMeshAgent.SetDestination(Hit.position);
 			EndAction(true);
 		}
 
